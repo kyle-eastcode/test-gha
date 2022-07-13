@@ -1,0 +1,23 @@
+name: 'Test Working Directory'
+description: 'Test the working directory function'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Current Working Directory
+      id: directory
+      shell: bash
+      run: |
+        echo "Current Working Directory => " && pwd
+
+    - name: Working Directory Contents
+      id: contents
+      shell: bash
+      run: |
+        echo "Working Directory Contents => " && ls
+
+    - name: Working Directory Contents
+      id: contents
+      shell: bash
+      run: |
+        ./hello.sh
