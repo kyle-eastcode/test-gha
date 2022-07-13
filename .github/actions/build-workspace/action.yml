@@ -17,7 +17,7 @@ runs:
         echo "Working Directory Contents => " && ls
 
     - name: Working Directory Contents
-      id: contents
+      id: hello
       shell: bash
       run: |
         ./hello.sh
