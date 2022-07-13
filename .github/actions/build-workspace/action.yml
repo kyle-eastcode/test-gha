@@ -11,18 +11,18 @@ runs:
   steps:
     - name: Current Working Directory
       id: pwd
-      bash: shell
+      shell: bash
       working-directory: infra/${{ inputs.environment }}
       run: echo "Current Working Directory => " && pwd
 
     - name: Working Directory Contents
       id: ls
-      bash: shell
+      shell: bash
       working-directory: infra/${{ inputs.environment }}
       run: echo "Working Directory Contents => " && ls
 
     - name: Working Directory Contents
       id: hello
-      bash: shell
+      shell: bash
       working-directory: infra/${{ inputs.environment }}
       run: ./hello.sh
