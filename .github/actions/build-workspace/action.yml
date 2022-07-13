@@ -6,18 +6,12 @@ runs:
   steps:
     - name: Current Working Directory
       id: directory
-      shell: bash
-      run: |
-        echo "Current Working Directory => " && pwd
+      run: echo "Current Working Directory => " && pwd
 
     - name: Working Directory Contents
       id: contents
-      shell: bash
-      run: |
-        echo "Working Directory Contents => " && ls
+      run: echo "Working Directory Contents => " && ls
 
     - name: Working Directory Contents
       id: hello
-      shell: bash
-      run: |
-        ./hello.sh
+      run: ./hello.sh

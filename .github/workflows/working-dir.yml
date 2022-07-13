@@ -14,7 +14,8 @@ jobs:
     environment: test
     defaults:
       run:
-        working-directory: ./infra/stage
+        shell: bash
+        working-directory: infra/stage
     steps:
       - uses: actions/checkout@v3
       - id: test-working-directory
