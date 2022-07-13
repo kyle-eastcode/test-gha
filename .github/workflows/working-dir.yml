@@ -16,3 +16,5 @@ jobs:
       - uses: actions/checkout@v3
       - id: test-working-directory
         uses: ./.github/actions/build-workspace
+        with:
+          environment: stage

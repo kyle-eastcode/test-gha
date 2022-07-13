@@ -1,5 +1,10 @@
 name: 'Test Working Directory'
 description: 'Test the working directory function'
+inputs:
+  environment:
+    description: 'The env you wish to test (dev, stage, prod)'
+    required: true
+    default: 'dev'
 
 runs:
   defaults:
@@ -9,13 +14,19 @@ runs:
   using: 'composite'
   steps:
     - name: Current Working Directory
-      id: directory
+      id: pwd
+      bash: shell
+      working-directory: infra/${{ inputs.environment }}
       run: echo "Current Working Directory => " && pwd
 
     - name: Working Directory Contents
-      id: contents
+      id: ls
+      bash: shell
+      working-directory: infra/${{ inputs.environment }}
       run: echo "Working Directory Contents => " && ls
 
     - name: Working Directory Contents
       id: hello
+      bash: shell
+      working-directory: infra/${{ inputs.environment }}
       run: ./hello.sh
