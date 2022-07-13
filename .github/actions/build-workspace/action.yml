@@ -2,6 +2,10 @@ name: 'Test Working Directory'
 description: 'Test the working directory function'
 
 runs:
+  defaults:
+    run:
+      shell: bash
+      working-directory: infra/stage
   using: 'composite'
   steps:
     - name: Current Working Directory

@@ -12,10 +12,6 @@ jobs:
     name: 'Test working-directory'
     runs-on: ubuntu-latest
     environment: test
-    defaults:
-      run:
-        shell: bash
-        working-directory: infra/stage
     steps:
       - uses: actions/checkout@v3
       - id: test-working-directory
