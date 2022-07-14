@@ -1,0 +1,20 @@
+name: CI/CD Main Pipeline
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+
+jobs:
+  test-working-directory:
+    name: 'Test working-directory'
+    runs-on: ubuntu-latest
+    environment: test
+    steps:
+      - uses: actions/checkout@v3
+      - id: test-working-directory
+        uses: ./.github/actions/build-workspace
+        with:
+          environment: stage
