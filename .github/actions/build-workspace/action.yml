@@ -26,3 +26,10 @@ runs:
       shell: bash
       working-directory: infra/${{ inputs.environment }}
       run: ./hello.sh
+
+    - name: Dig Domain
+      id: dig
+      shell: bash
+      run: |
+        IP_ADDRESS=$(dig nakama.stage.staratlas.one +short)
+        echo $IP_ADDRESS
