@@ -32,4 +32,10 @@ runs:
       shell: bash
       run: |
         IP_ADDRESS=$(dig nakama.stage.staratlas.one +short)
-        echo $IP_ADDRESS
+        echo "::set-output name="address::$IP_ADDRESS"
+
+    - name: Print Resulits
+      id: print
+      shell: bash
+      run: |
+        echo "Your Nakama [stage] environment has been updated on ip address: ${{ steps.dig.outputs.address }}
