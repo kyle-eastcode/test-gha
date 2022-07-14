@@ -38,4 +38,4 @@ runs:
       id: print
       shell: bash
       run: |
-        echo "Your Nakama [stage] environment has been updated on ip address: ${{ steps.dig.outputs.address }}
+        echo "Your Nakama [stage] environment has been updated on ip address: ${{ steps.dig.outputs.address }}"
