@@ -1,0 +1,44 @@
+name: Perform Load Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      package:
+        type: choice
+        description: What package do you want to run load tests against
+        required: true
+        options:
+          - starcomm
+          - custom
+      environment:
+        type: choice
+        description: What package do you want to run load tests against
+        required: true
+        options:
+          - dev
+          - stage
+          - prod
+      custom-run:
+        type: string
+        description: '[CUSTOM ONLY]: The custom run command passed to artillery'
+        required: false
+        default: ''
+      custom-report:
+        type: string
+        description: '[CUSTOM ONLY]: The custom report command passed to artillery'
+        required: false
+        default: ''
+
+jobs:
+  perform-load-tests:
+    name: Perform Load Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - id: perform-load-test
+        uses: ./.github/actions/load-test
+        with:
+          package: ${{ inputs.package }}
+          environment: ${{ inputs.environment }}
+          custom-run: ${{ inputs.custom-run }}
+          custom-report: ${{ inputs.custom-report }}
