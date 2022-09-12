@@ -1,0 +1,114 @@
+name: Load Test
+description: Use Artillery.io to perform pre-defined load tests from the selected package
+inputs:
+  package:
+    description: 'The package you wish to run your load tests against'
+    required: true
+    default: ''
+  environment:
+    description: 'The environment you want to target when performing the load tests'
+    required: true
+    default: 'dev'
+  custom-run:
+    description: 'The custom artillery run command to be passed when package is set to custom'
+    required: false
+    default: ''
+  custom-report:
+    description: 'The custom artillery report command to be passed when package is set to custom'
+    required: false
+    default: ''
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Copy test files
+      uses: Bhacaz/checkout-files@v2
+      with:
+        files: packages/${{ inputs.package }}/loadtest
+
+    - name: Make reports directory
+      shell: bash
+      run: mkdir reports
+
+    - name: Determine target url
+      id: get-target
+      if: ${{ inputs.package != 'custom' }}
+      shell: bash
+      run: |
+        SERVICE="starcomm"
+        ENV="dev"
+        DOMAIN="staratlas.one"
+
+        case ${{ inputs.package }} in
+          starcomm)
+            SERVICE=starcomm
+            ;;
+
+          *)
+            SERVICE=starcomm
+            ;;
+        esac
+
+        case ${{ inputs.environment }} in
+          dev)
+            SERVICE=".dev"
+            DOMAIN="staratlas.one"
+            ;;
+
+          stage)
+            SERVICE=".stage"
+            DOMAIN="staratlas.one"
+            ;;
+          
+          prod)
+            SERVICE=""
+            DOMAIN="staratlas.com"
+            ;;
+
+          *)
+            SERVICE=dev
+            DOMAIN="staratlas.one"
+            ;;
+        esac
+
+        echo ::set-output name=target_url::$(echo "https://$SERVICE${{ inputs.environment }}.$DOMAIN")
+
+    - name: Execute load tests
+      if: ${{ inputs.package != 'custom' }}
+      shell: bash
+      run: |
+        echo "${{ steps.get-target.outputs.target_url }}" >> test.txt
+
+    # - name: Execute load tests
+    #   if: ${{ inputs.package != 'custom' }}
+    #   uses: docker://artilleryio/artillery:latest
+    #   with:
+    #     entrypoint: /home/node/artillery/bin/run
+    #     args: run --target ${{ steps.get-target.outputs.target_url }} --output ./reports/${{ inputs.package }}-report.json ./packages/${{ inputs.package }}/loadtest/test-websockets.yml
+
+    # - name: Generate HTML report
+    #   if: ${{ inputs.package != 'custom' }}
+    #   uses: docker://artilleryio/artillery:latest
+    #   with:
+    #     entrypoint: /home/node/artillery/bin/run
+    #     args: report --output ./reports/${{ inputs.package }}.html ./reports/${{ inputs.package }}-report.json
+
+    # - name: Execute custom load tests
+    #   if: ${{ inputs.package == 'custom' && inputs.custom-run != '' }}
+    #   uses: docker://artilleryio/artillery:latest
+    #   with:
+    #     entrypoint: /home/node/artillery/bin/run
+    #     args: ${{ inputs.custom-run }}
+
+    # - name: Generate Custom HTML report
+    #   if: ${{ inputs.package == 'custom' && inputs.custom-report != '' }}
+    #   uses: docker://artilleryio/artillery:latest
+    #   with:
+    #     entrypoint: /home/node/artillery/bin/run
+    #     args: ${{ inputs.custom-report }}
+
+    - name: Archive test report
+      uses: actions/upload-artifact@v2
+      with:
+        name: artillery-test-report
+        path: test.txt
